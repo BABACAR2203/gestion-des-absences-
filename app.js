@@ -196,7 +196,7 @@ const ELEVES = [
   { id: 330, nom: "Cheikh I Thiam",               classe: "Grande Section B" },
 
   // ── CP (60 élèves) ────────────────────────────────────────
-  { id: 401, nom: "Wiston Sadio Bâ",              classe: "CP" },
+  { id: 401, nom: "Aissatou Sadio Bâ",              classe: "CP" },
   { id: 402, nom: "Fatou Bâ",                     classe: "CP" },
   { id: 403, nom: "El Maedo M Cissé",             classe: "CP" },
   { id: 404, nom: "Fatou K Cissé",                classe: "CP" },
