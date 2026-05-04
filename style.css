@@ -359,3 +359,47 @@ body {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
+
+/* ── BOUTON ODT ─────────────────────────────────────────────── */
+.btn-odf {
+  width: 100%;
+  background: #fff;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 14px;
+  padding: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background .2s, color .2s, transform .1s;
+}
+
+.btn-odf:hover  { background: var(--orange-l); }
+.btn-odf:active { transform: scale(.97); }
+
+/* ── BOUTON PDF ─────────────────────────────────────────────── */
+.btn-pdf {
+  width: 100%;
+  background: #fff;
+  color: #E8610A;
+  border: 2px solid #E8610A;
+  border-radius: 14px;
+  padding: 15px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background .2s, color .2s, transform .1s, box-shadow .2s;
+}
+
+.btn-pdf:hover  { background: #FEF0E6; box-shadow: 0 4px 14px rgba(232,97,10,.2); }
+.btn-pdf:active { transform: scale(.97); }
