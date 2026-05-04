@@ -136,6 +136,33 @@ const ELEVES = [
   { id: 258, nom: "Sokhna Maimouna Wade",                 classe: "MS" },
   { id: 259, nom: "Aminata Aidara Yaffa",                 classe: "MS" },
 
+
+  // ── GRANDE SECTION A (25 élèves) ──────────────────────────
+  { id: 910, nom: "Ndeye Rama Ba", classe: "Grande Section A" },
+  { id: 911, nom: "Khadija A Camara", classe: "Grande Section A" },
+  { id: 912, nom: "Mame Alsane Laye Toure", classe: "Grande Section A" },
+  { id: 913, nom: "Assane Diaw", classe: "Grande Section A" },
+  { id: 914, nom: "Cheikh Modou Kava Sene", classe: "Grande Section A" },
+  { id: 915, nom: "Mame Faty Diakhate", classe: "Grande Section A" },
+  { id: 916, nom: "Libass Laye Diouf", classe: "Grande Section A" },
+  { id: 917, nom: "Pape Matar Diop", classe: "Grande Section A" },
+  { id: 918, nom: "Marieme Diop", classe: "Grande Section A" },
+  { id: 919, nom: "Seydina Mouhamed Ndiaye", classe: "Grande Section A" },
+  { id: 920, nom: "Nde Fatou Dieng", classe: "Grande Section A" },
+  { id: 921, nom: "Mamadou Ndiaye Diop", classe: "Grande Section A" },
+  { id: 922, nom: "Mouhamed Laye Diop", classe: "Grande Section A" },
+  { id: 923, nom: "El Hadji Ibrahima Nda", classe: "Grande Section A" },
+  { id: 924, nom: "El Hadji Moustapha Diop", classe: "Grande Section A" },
+  { id: 925, nom: "Fatou Bintou Mboup", classe: "Grande Section A" },
+  { id: 926, nom: "Sokhna Awa Diop", classe: "Grande Section A" },
+  { id: 927, nom: "Babacar Ndiaye", classe: "Grande Section A" },
+  { id: 928, nom: "Mamadou Abdou Laye Ndong", classe: "Grande Section A" },
+  { id: 929, nom: "Baye Djibril Fall", classe: "Grande Section A" },
+  { id: 930, nom: "Mariama Faty", classe: "Grande Section A" },
+  { id: 931, nom: "Moussa Ndiaye Niang", classe: "Grande Section A" },
+  { id: 932, nom: "Fatou Diongue Datte", classe: "Grande Section A" },
+  { id: 933, nom: "Fatima Doucoure", classe: "Grande Section A" },
+  { id: 934, nom: "El Hadji Malick Kane", classe: "Grande Section A" },
   // ── GRANDE SECTION B (30 élèves) ──────────────────────────
   { id: 301, nom: "Coumba Bâ",                    classe: "Grande Section B" },
   { id: 302, nom: "Ahmadou B Diaw",               classe: "Grande Section B" },
@@ -169,7 +196,7 @@ const ELEVES = [
   { id: 330, nom: "Cheikh I Thiam",               classe: "Grande Section B" },
 
   // ── CP (60 élèves) ────────────────────────────────────────
-  { id: 401, nom: "Sadio Bâ",              classe: "CP" },
+  { id: 401, nom: "Wiston Sadio Bâ",              classe: "CP" },
   { id: 402, nom: "Fatou Bâ",                     classe: "CP" },
   { id: 403, nom: "El Maedo M Cissé",             classe: "CP" },
   { id: 404, nom: "Fatou K Cissé",                classe: "CP" },
