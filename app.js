@@ -1,4 +1,103 @@
 /* ============================================================
+   KYSGBS – Sécurité / Connexion
+   Hash SHA-256 du mot de passe (ne pas partager ce fichier)
+   Mot de passe par défaut : kysgbs2026
+   Pour changer : remplacer la valeur de MOT_DE_PASSE_HASH
+   ============================================================ */
+
+const MOT_DE_PASSE_HASH = "208488e1912cfc3697f3669fcac6deb5b332b5c7d54155ac62fcf5c9f4d247c7";
+const MAX_TENTATIVES    = 5;
+const DUREE_BLOCAGE_MIN = 10; // minutes de blocage après trop d'essais
+const SESSION_KEY       = "kysgbs_session";
+
+// ── VÉRIFICATION AU DÉMARRAGE ──────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  // Si session valide → ouvrir l'app directement
+  var session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+  if (session && session.expiry > Date.now()) {
+    ouvrirApp();
+  }
+
+  // Connexion via touche Entrée
+  var input = document.getElementById('login-password');
+  if (input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') verifierMotDePasse();
+    });
+  }
+});
+
+// ── HASHER UN TEXTE (SHA-256 natif) ───────────────────────────
+async function sha256(texte) {
+  var buffer  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texte));
+  return Array.from(new Uint8Array(buffer)).map(function(b) {
+    return b.toString(16).padStart(2, '0');
+  }).join('');
+}
+
+// ── VÉRIFIER LE MOT DE PASSE ───────────────────────────────────
+async function verifierMotDePasse() {
+  var erreurEl    = document.getElementById('login-error');
+  var attemptsEl  = document.getElementById('login-attempts');
+  var input       = document.getElementById('login-password');
+
+  // Vérifier si bloqué
+  var blocage = JSON.parse(localStorage.getItem('kysgbs_blocage') || "null");
+  if (blocage && blocage.expiry > Date.now()) {
+    var restant = Math.ceil((blocage.expiry - Date.now()) / 60000);
+    erreurEl.textContent = "Trop de tentatives. Réessayez dans " + restant + " min.";
+    input.value = '';
+    return;
+  }
+
+  var hash = await sha256(input.value.trim());
+
+  if (hash === MOT_DE_PASSE_HASH) {
+    // ✅ Succès — session valide 8h
+    localStorage.removeItem('kysgbs_tentatives');
+    localStorage.removeItem('kysgbs_blocage');
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      expiry: Date.now() + 8 * 60 * 60 * 1000
+    }));
+    ouvrirApp();
+  } else {
+    // ❌ Échec
+    var tentatives = parseInt(localStorage.getItem('kysgbs_tentatives') || "0") + 1;
+    localStorage.setItem('kysgbs_tentatives', tentatives);
+    input.value = '';
+
+    var restantes = MAX_TENTATIVES - tentatives;
+    if (restantes <= 0) {
+      // Bloquer
+      localStorage.setItem('kysgbs_blocage', JSON.stringify({
+        expiry: Date.now() + DUREE_BLOCAGE_MIN * 60 * 1000
+      }));
+      localStorage.setItem('kysgbs_tentatives', "0");
+      erreurEl.textContent = "Accès bloqué " + DUREE_BLOCAGE_MIN + " minutes.";
+      attemptsEl.textContent = '';
+    } else {
+      erreurEl.textContent = "Mot de passe incorrect.";
+      attemptsEl.textContent = restantes + " tentative(s) restante(s)";
+    }
+  }
+}
+
+// ── OUVRIR L'APP ───────────────────────────────────────────────
+function ouvrirApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-content').style.display  = 'block';
+  init();
+}
+
+// ── SE DÉCONNECTER ─────────────────────────────────────────────
+function deconnecter() {
+  if (confirm("Se déconnecter ?")) {
+    localStorage.removeItem(SESSION_KEY);
+    location.reload();
+  }
+}
+
+/* ============================================================
    KYSGBS – Gestion des Absences
    app.js
    ============================================================ */
@@ -196,7 +295,7 @@ const ELEVES = [
   { id: 330, nom: "Cheikh I Thiam",               classe: "Grande Section B" },
 
   // ── CP (60 élèves) ────────────────────────────────────────
-  { id: 401, nom: "Aissatou Sadio Bâ",              classe: "CP" },
+  { id: 401, nom: "Wiston Sadio Bâ",              classe: "CP" },
   { id: 402, nom: "Fatou Bâ",                     classe: "CP" },
   { id: 403, nom: "El Maedo M Cissé",             classe: "CP" },
   { id: 404, nom: "Fatou K Cissé",                classe: "CP" },

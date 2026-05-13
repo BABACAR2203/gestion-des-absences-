@@ -13,89 +13,119 @@
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- jsPDF (génération PDF côté navigateur) -->
+  <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-  <!-- ══ HEADER ══════════════════════════════════════════════ -->
-  <div class="header">
-    <div class="header-inner">
+  <!-- ══ ÉCRAN DE CONNEXION ════════════════════════════════════ -->
+  <div id="login-screen">
+    <div class="login-card">
 
-      <div class="logo-circle">
+      <div class="login-logo">
         <img src="WhatsApp Image 2026-01-15 at 08.58.23.jpeg" alt="Logo KYSGBS" />
       </div>
+      <h2>Appel Quotidien</h2>
+      <p>Keur Yaye Sokhna Gueye</p>
 
-      <div>
-        <h1>Appel Quotidien</h1>
-        <p>Keur Yaye Sokhna Gueye</p>
-        <div id="date-display"></div>
+      <label class="login-label" for="login-password">Mot de passe</label>
+      <input
+        class="login-input"
+        type="password"
+        id="login-password"
+        placeholder="••••••••"
+        maxlength="30"
+        autocomplete="current-password"
+      />
+
+      <button class="login-btn" onclick="verifierMotDePasse()">
+        Connexion
+      </button>
+
+      <div class="login-error" id="login-error"></div>
+      <div class="login-attempts" id="login-attempts"></div>
+
+    </div>
+  </div>
+
+  <!-- ══ APPLICATION (cachée jusqu'à connexion) ════════════════ -->
+  <div id="app-content">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-inner">
+        <div class="logo-circle">
+          <img src="WhatsApp Image 2026-01-15 at 08.58.23.jpeg" alt="Logo KYSGBS" />
+        </div>
+        <div>
+          <h1>Appel Quotidien</h1>
+          <p>Keur Yaye Sokhna Gueye</p>
+          <div id="date-display"></div>
+        </div>
+        <!-- Bouton déconnexion -->
+        <button onclick="deconnecter()" title="Se déconnecter" style="margin-left:auto;background:rgba(255,255,255,.2);border:none;border-radius:10px;padding:8px 10px;cursor:pointer;color:#fff;font-size:1.1rem;">⏻</button>
+      </div>
+    </div>
+
+    <!-- CONTENU -->
+    <div class="wrap">
+
+      <!-- Sélecteur de classe -->
+      <div class="class-select-wrap">
+        <label for="classe-select">Classe</label>
+        <select id="classe-select"></select>
+      </div>
+
+      <!-- Statistiques -->
+      <div class="stats">
+        <div class="stat-card stat-total">
+          <div class="stat-label">Total</div>
+          <div class="stat-num" id="count-total">0</div>
+        </div>
+        <div class="stat-card stat-p">
+          <div class="stat-label">Présents</div>
+          <div class="stat-num" id="count-p">0</div>
+        </div>
+        <div class="stat-card stat-r">
+          <div class="stat-label">Retards</div>
+          <div class="stat-num" id="count-r">0</div>
+        </div>
+        <div class="stat-card stat-a">
+          <div class="stat-label">Absents</div>
+          <div class="stat-num" id="count-a">0</div>
+        </div>
+      </div>
+
+      <!-- Liste élèves -->
+      <div id="liste-eleves"></div>
+
+      <!-- Boutons d'action -->
+      <div class="actions">
+        <button class="btn-wa" onclick="genererRapport()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.565 4.14 1.545 5.873L.057 23.7a.75.75 0 00.918.978l5.98-1.453A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.96 0-3.803-.524-5.393-1.436l-.38-.225-3.993.97.998-3.877-.248-.39A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+          </svg>
+          Envoyer le Rapport WhatsApp
+        </button>
+
+        <button class="btn-pdf" onclick="genererPDF()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+            <path d="M8 13h2.5c1.1 0 1.5.6 1.5 1.3 0 .8-.5 1.4-1.6 1.4H9v1.3H8V13zm1 2h1.3c.5 0 .7-.2.7-.6s-.2-.6-.7-.6H9v1.2zm3.5-2H14c1.4 0 2.2.8 2.2 2.1 0 1.4-.8 2.2-2.2 2.2h-1.5V13zm1 3.5c.8 0 1.2-.4 1.2-1.3 0-.9-.4-1.3-1.2-1.3h-.5v2.6h.5zm2.5-3.5h3v.9h-2v.8h1.8v.8H17v1.5h-1V13z"/>
+          </svg>
+          Télécharger Rapport PDF
+        </button>
+
+        <button class="btn-reset" onclick="reinitialiserAppel()">
+          ↺ Réinitialiser l'appel du jour
+        </button>
       </div>
 
     </div>
   </div>
 
-  <!-- ══ CONTENU PRINCIPAL ════════════════════════════════════ -->
-  <div class="wrap">
-
-    <!-- Sélecteur de classe -->
-    <div class="class-select-wrap">
-      <label for="classe-select">Classe</label>
-      <select id="classe-select"></select>
-    </div>
-
-    <!-- Statistiques rapides -->
-    <div class="stats">
-      <div class="stat-card stat-total">
-        <div class="stat-label">Total</div>
-        <div class="stat-num" id="count-total">0</div>
-      </div>
-      <div class="stat-card stat-p">
-        <div class="stat-label">Présents</div>
-        <div class="stat-num" id="count-p">0</div>
-      </div>
-      <div class="stat-card stat-r">
-        <div class="stat-label">Retards</div>
-        <div class="stat-num" id="count-r">0</div>
-      </div>
-      <div class="stat-card stat-a">
-        <div class="stat-label">Absents</div>
-        <div class="stat-num" id="count-a">0</div>
-      </div>
-    </div>
-
-    <!-- Liste des élèves (injectée par JS) -->
-    <div id="liste-eleves"></div>
-
-    <!-- Boutons d'action -->
-    <div class="actions">
-
-      <!-- Bouton WhatsApp -->
-      <button class="btn-wa" onclick="genererRapport()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.565 4.14 1.545 5.873L.057 23.7a.75.75 0 00.918.978l5.98-1.453A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.96 0-3.803-.524-5.393-1.436l-.38-.225-3.993.97.998-3.877-.248-.39A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-        </svg>
-        Envoyer le Rapport WhatsApp
-      </button>
-
-      <!-- Bouton PDF -->
-      <button class="btn-pdf" onclick="genererPDF()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
-          <path d="M8 13h2.5c1.1 0 1.5.6 1.5 1.3 0 .8-.5 1.4-1.6 1.4H9v1.3H8V13zm1 2h1.3c.5 0 .7-.2.7-.6s-.2-.6-.7-.6H9v1.2zm3.5-2H14c1.4 0 2.2.8 2.2 2.1 0 1.4-.8 2.2-2.2 2.2h-1.5V13zm1 3.5c.8 0 1.2-.4 1.2-1.3 0-.9-.4-1.3-1.2-1.3h-.5v2.6h.5zm2.5-3.5h3v.9h-2v.8h1.8v.8H17v1.5h-1V13z"/>
-        </svg>
-        Télécharger Rapport PDF
-      </button>
-
-      <button class="btn-reset" onclick="reinitialiserAppel()">
-        ↺ Réinitialiser l'appel du jour
-      </button>
-    </div>
-
-  </div>
-
-  <!-- Toast de confirmation -->
+  <!-- Toast -->
   <div class="toast" id="toast"></div>
 
   <!-- Script -->
